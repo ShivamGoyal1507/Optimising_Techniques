@@ -23,7 +23,6 @@ Each algorithm is modularized in its own header file for clarity and reusability
 - Vogel’s Approximation Method (VAM) – Provides initial feasible solution for transportation problems
 - Integer Programming (IP) – Solves optimization problems with integer constraints using Branch and Bound
 - Mixed Integer Programming (MIP) – Handles problems with both integer and real variables
-- Binary Variable Support – Implicitly handled through constraints
 - Interactive Menu Interface – Simple command-line navigation
 - Formatted Output – Easy-to-read results for each method
 
@@ -37,7 +36,7 @@ project/
 ├── dual_simplex.hpp     # Dual Simplex Method
 ├── assignment.hpp       # Hungarian Algorithm
 ├── transportation.hpp   # Vogel's Approximation Method
-├── branch_bound.hpp     # Integer & Mixed Integer Programming (Branch and Bound)
+├── linear.hpp     # Integer & Mixed Integer Programming (Branch and Bound)
 └── main.cpp             # Main program and user interface
 ```
 
@@ -47,12 +46,12 @@ project/
 
 ### Compile:
 ```
-g++ main.cpp -o or_program
+g++ main.cpp -o optimisation
 ```
 
 ### Run:
 ```
-./or_program
+./optimisation
 ```
 
 ---
@@ -67,9 +66,10 @@ Operations Research Methods:
 2. Dual Simplex Method
 3. Assignment Problem (Hungarian Algorithm)
 4. Transportation Problem (Vogel's Approximation)
-5. Integer/Mixed Integer Programming (Branch and Bound)
-6. Exit
-Enter your choice (1-6):
+5. Integer Programming (Branch and Bound)
+6. Mixed Integer Programming (Branch and Bound)
+7. Exit
+Enter your choice (1-7):
 ```
 
 Select an option and follow the interactive prompts to input your problem data.
@@ -112,10 +112,17 @@ Select an option and follow the interactive prompts to input your problem data.
 
 ### 5. Integer / Mixed Integer Programming (Branch and Bound)
 - Input: Objective function and constraints
-- Specify which variables are integers or mixed
 - Binary variables handled via constraints
 - Solves using Branch and Bound method
-- Output: Optimal integer/mixed-integer solution
+- Output: Optimal integer solution
+
+---
+
+### 6. Mixed Integer Programming (Branch and Bound)
+- Input: Objective function and constraints
+- Binary variables handled via constraints
+- Solves using Branch and Bound method
+- Output: Optimal mixed-integer solution
 
 ---
 
@@ -167,14 +174,7 @@ Cost matrix:
 
 ---
 
-## License
-
-This program is provided as-is for educational purposes. Feel free to modify and use it as needed.
-
----
-
 ## Author
 
-[Your Name]  
-[Your Contact Information]
+Shivam Kumar Goyal
 
