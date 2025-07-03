@@ -5,103 +5,134 @@
 #include <limits>
 #include <cmath>
 
+using namespace std;
+
 namespace DualSimplex {
 
-void printTable(const std::vector<std::vector<double>>& table) {
+const double EPS = 1e-9;
+
+void printTable(const vector<vector<double>>& table) {
     for (const auto& row : table) {
         for (double val : row) {
-            std::cout << std::setw(10) << std::fixed << std::setprecision(2) << val << " ";
+            cout << setw(10) << fixed << setprecision(2) << val << " ";
         }
-        std::cout << std::endl;
+        cout << endl;
     }
-    std::cout << std::endl;
+    cout << endl;
 }
 
-int findNegativeRow(const std::vector<std::vector<double>>& table) {
-    for (int i = 0; i < table.size() - 1; i++) {
-        if (table[i].back() < 0)
+size_t findNegativeRow(const vector<vector<double>>& table) {
+    for (size_t i = 0; i < table.size() - 1; ++i) {
+        if (table[i].back() < -EPS)
             return i;
     }
-    return -1;
+    return table.size(); // Indicates not found
 }
 
-int findDualPivotCol(const std::vector<std::vector<double>>& table, int pivotRow) {
-    int col = -1;
-    double minRatio = std::numeric_limits<double>::max();
-    for (int j = 0; j < table[0].size() - 1; j++) {
-        if (table[pivotRow][j] < 0) {
-            double ratio = abs(table.back()[j] / table[pivotRow][j]);
+size_t findDualPivotCol(const vector<vector<double>>& table, size_t pivotRow) {
+    size_t col = table[0].size(); // Indicates not found
+    double minRatio = numeric_limits<double>::max();
+
+    for (size_t j = 0; j < table[0].size() - 1; ++j) {
+        if (table[pivotRow][j] < -EPS) {
+            double numerator = table.back()[j];
+            double denominator = table[pivotRow][j];
+            double ratio = fabs(numerator / denominator);
             if (ratio < minRatio) {
                 minRatio = ratio;
                 col = j;
             }
         }
     }
+
     return col;
 }
 
-void performDualSimplex(std::vector<std::vector<double>>& table) {
-    while (true) {
-        int pivotRow = findNegativeRow(table);
-        if (pivotRow == -1) break;
+void pivot(vector<vector<double>>& table, size_t pivotRow, size_t pivotCol) {
+    double pivotElement = table[pivotRow][pivotCol];
+    if (fabs(pivotElement) < EPS) {
+        cout << "Pivot element is zero — cannot proceed.\n";
+        exit(1);
+    }
 
-        int pivotCol = findDualPivotCol(table, pivotRow);
-        if (pivotCol == -1) {
-            std::cout << "Infeasible solution\n";
-            return;
-        }
+    // Normalize pivot row
+    for (size_t j = 0; j < table[0].size(); ++j) {
+        table[pivotRow][j] /= pivotElement;
+    }
 
-        double pivot = table[pivotRow][pivotCol];
-        for (int j = 0; j < table[0].size(); j++) {
-            table[pivotRow][j] /= pivot;
-        }
-
-        for (int i = 0; i < table.size(); i++) {
-            if (i != pivotRow) {
-                double factor = table[i][pivotCol];
-                for (int j = 0; j < table[0].size(); j++) {
-                    table[i][j] -= factor * table[pivotRow][j];
-                }
+    // Eliminate pivot column in other rows
+    for (size_t i = 0; i < table.size(); ++i) {
+        if (i != pivotRow) {
+            double factor = table[i][pivotCol];
+            for (size_t j = 0; j < table[0].size(); ++j) {
+                table[i][j] -= factor * table[pivotRow][j];
             }
         }
     }
+}
 
-    std::cout << "\nOptimal Table:\n";
+void performDualSimplex(vector<vector<double>>& table) {
+    while (true) {
+        size_t pivotRow = findNegativeRow(table);
+        if (pivotRow >= table.size() - 1) break;
+
+        size_t pivotCol = findDualPivotCol(table, pivotRow);
+        if (pivotCol >= table[0].size()) {
+            cout << "Infeasible solution: no valid pivot column.\n";
+            return;
+        }
+
+        pivot(table, pivotRow, pivotCol);
+    }
+
+    cout << "\nOptimal Table:\n";
     printTable(table);
-    std::cout << "Optimal value: " << table.back().back() << std::endl;
+    cout << "Optimal value: " << -table.back().back() << endl; // Convert back to maximization
 }
 
 void runDualSimplex() {
     int constraints, variables;
-    std::cout << "Enter number of constraints: ";
-    std::cin >> constraints;
-    std::cout << "Enter number of variables: ";
-    std::cin >> variables;
+    cout << "Enter number of constraints: ";
+    cin >> constraints;
+    if (constraints <= 0) {
+        cout << "Number of constraints must be positive.\n";
+        return;
+    }
 
-    std::vector<std::vector<double>> table(constraints + 1, std::vector<double>(variables + constraints + 1, 0));
+    cout << "Enter number of variables: ";
+    cin >> variables;
+    if (variables <= 0) {
+        cout << "Number of variables must be positive.\n";
+        return;
+    }
+
+    size_t totalCols = static_cast<size_t>(variables + constraints + 1);
+    vector<vector<double>> table(constraints + 1, vector<double>(totalCols, 0));
 
     // Input constraints
-    std::cout << "Enter coefficients of constraints (LHS) and RHS:\n";
-    for (int i = 0; i < constraints; i++) {
-        for (int j = 0; j < variables; j++) {
-            std::cout << "Coefficient x" << j + 1 << " in constraint " << i + 1 << ": ";
-            std::cin >> table[i][j];
+    cout << "\nEnter coefficients of each constraint followed by RHS:\n";
+    for (int i = 0; i < constraints; ++i) {
+        for (int j = 0; j < variables; ++j) {
+            cout << "Constraint " << i + 1 << ", Coefficient of x" << j + 1 << ": ";
+            cin >> table[i][j];
         }
-        // Add slack variables
-        table[i][variables + i] = 1;
-        std::cout << "RHS value for constraint " << i + 1 << ": ";
-        std::cin >> table[i].back();
+        table[i][variables + i] = 1; // Slack variable
+        cout << "Constraint " << i + 1 << ", RHS: ";
+        cin >> table[i].back();
     }
 
     // Input objective function
-    std::cout << "Enter coefficients of objective function (to maximize):\n";
-    for (int j = 0; j < variables; j++) {
-        std::cout << "Coefficient x" << j + 1 << " in objective: ";
-        std::cin >> table[constraints][j];
-        table[constraints][j] *= -1; // Convert to standard form
+    cout << "\nEnter coefficients of the objective function (to maximize):\n";
+    for (int j = 0; j < variables; ++j) {
+        cout << "Coefficient of x" << j + 1 << ": ";
+        cin >> table[constraints][j];
+        table[constraints][j] *= -1; // Convert to standard LP form (minimization)
     }
+
+    cout << "\nInitial Table:\n";
+    printTable(table);
 
     performDualSimplex(table);
 }
 
-} // namespace DualSimplex
+}
