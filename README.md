@@ -1,34 +1,29 @@
-# Operations Research Methods in C++
+# 📊 Operations Research Methods in C++
 
-## Overview
-
+## 🧠 Overview
 This C++ program implements six essential Operations Research (OR) algorithms, widely used in optimization and decision science:
 
-- Simplex Method for Linear Programming (LP)
-- Dual Simplex Method
-- Assignment Problem (Hungarian Algorithm)
-- Transportation Problem (Vogel’s Approximation Method)
-- Integer Programming (IP)
-- Mixed Integer Programming (MIP)
+- **Simplex Method** for Linear Programming (LP)
+- **Dual Simplex Method**
+- **Assignment Problem** (Hungarian Algorithm)
+- **Transportation Problem** (Vogel’s Approximation Method)
 
 Each algorithm is modularized in its own header file for clarity and reusability.
 
 ---
 
-## Features
+## ✨ Features
 
-- Simplex Method – Solves LP problems in standard form
-- Dual Simplex Method – Solves LP problems with infeasible starting points
-- Hungarian Algorithm – Solves optimal assignment of workers to tasks
-- Vogel’s Approximation Method (VAM) – Provides initial feasible solution for transportation problems
-- Integer Programming (IP) – Solves optimization problems with integer constraints using Branch and Bound
-- Mixed Integer Programming (MIP) – Handles problems with both integer and real variables
-- Interactive Menu Interface – Simple command-line navigation
-- Formatted Output – Easy-to-read results for each method
+- ✔️ **Simplex Method** – Solves LP problems in standard form  
+- ✔️ **Dual Simplex Method** – Solves LP problems with infeasible starting points  
+- ✔️ **Hungarian Algorithm** – Solves optimal assignment of workers to tasks  
+- ✔️ **Vogel’s Approximation Method (VAM)** – Provides initial feasible solution for transportation problems  
+- ✔️ **Interactive Menu Interface** – Simple command-line navigation  
+- ✔️ **Formatted Output** – Easy-to-read results for each method  
 
 ---
 
-## File Structure
+## 📁 File Structure
 
 ```
 project/
@@ -36,29 +31,28 @@ project/
 ├── dual_simplex.hpp     # Dual Simplex Method
 ├── assignment.hpp       # Hungarian Algorithm
 ├── transportation.hpp   # Vogel's Approximation Method
-├── linear.hpp     # Integer & Mixed Integer Programming (Branch and Bound)
 └── main.cpp             # Main program and user interface
 ```
 
 ---
 
-## Compilation & Execution
+## ⚙️ Compilation & Execution
 
 ### Compile:
-```
-g++ main.cpp -o optimisation
+```bash
+make
 ```
 
 ### Run:
-```
-./optimisation
+```bash
+make run
 ```
 
 ---
 
-## Menu and Usage
+## 🧑‍💻 Menu and Usage
 
-After running the executable, you’ll see the following menu:
+After running the executable, you'll see the following menu:
 
 ```
 Operations Research Methods:
@@ -66,115 +60,106 @@ Operations Research Methods:
 2. Dual Simplex Method
 3. Assignment Problem (Hungarian Algorithm)
 4. Transportation Problem (Vogel's Approximation)
-5. Integer Programming (Branch and Bound)
-6. Mixed Integer Programming (Branch and Bound)
-7. Exit
-Enter your choice (1-7):
+5. Exit
+Enter your choice (1-5):
 ```
 
 Select an option and follow the interactive prompts to input your problem data.
 
 ---
 
-## Method Details
+## 📌 Method Details
 
 ### 1. Simplex Method
-- Input: Number of variables and constraints
-- Enter each constraint (coefficients + RHS)
-- Define the objective function
+- Input: Number of variables and constraints  
+- Enter each constraint (coefficients + RHS)  
+- Define the objective function  
 - Output: Optimal solution vector and objective value
 
 ---
 
 ### 2. Dual Simplex Method
-- Similar to Simplex input
-- Used when initial basic solution is infeasible
+- Similar to Simplex input  
+- Used when initial basic solution is infeasible  
 - Maintains dual feasibility while optimizing
 
 ---
 
 ### 3. Assignment Problem (Hungarian Algorithm)
-- Input: Number of workers/tasks (n)
-- Enter a square n × n cost matrix
+- Input: Number of workers/tasks (`n`)  
+- Enter a square `n × n` cost matrix  
 - Output: Optimal assignment and minimum cost
 
 ---
 
 ### 4. Transportation Problem (Vogel’s Approximation Method)
 - Input:
-  - Number of sources and destinations
-  - Supply for each source
-  - Demand for each destination
-  - Cost matrix
-- Output: Initial feasible solution using VAM
+  - Number of sources and destinations  
+  - Supply for each source  
+  - Demand for each destination  
+  - Cost matrix  
+
 
 ---
 
-### 5. Integer / Mixed Integer Programming (Branch and Bound)
-- Input: Objective function and constraints
-- Binary variables handled via constraints
-- Solves using Branch and Bound method
-- Output: Optimal integer solution
-
----
-
-### 6. Mixed Integer Programming (Branch and Bound)
-- Input: Objective function and constraints
-- Binary variables handled via constraints
-- Solves using Branch and Bound method
-- Output: Optimal mixed-integer solution
-
----
-
-## Example Inputs
+## 🚚 Example Inputs
 
 ### Simplex Example:
 ```
-Number of constraints: 2
-Number of variables: 2
-Constraint 1: 1 1 <= 4
-Constraint 2: 2 1 <= 5
-Objective: Maximize 3x1 + 2x2
+Enter number of constraints: 2
+Enter number of variables: 2
+
+Enter coefficients of each constraint followed by RHS:
+Constraint 1, Coefficient of x1: -1
+Constraint 1, Coefficient of x2: 1
+Constraint 1, RHS: -1
+Constraint 2, Coefficient of x1: 1
+Constraint 2, Coefficient of x2: 2
+Constraint 2, RHS: 6
+
+Enter coefficients of the objective function (to maximize):
+Coefficient of x1: 3
+Coefficient of x2: 2
 ```
 
 ### Assignment Example:
 ```
-Number of workers/tasks: 3
-Cost matrix:
-90 75 75
-35 85 55
-125 95 90
+Enter number of workers: 3
+Enter number of tasks: 3
+
+Enter the cost matrix (3 x 3):
+Worker 1: 90 75 75
+Worker 2: 35 85 55
+Worker 3: 125 95 90
 ```
 
 ### Transportation Example:
 ```
-Sources: 3
-Destinations: 4
-Supply: 300 400 500
-Demand: 250 350 400 200
-Cost matrix:
-3 1 7 4
-2 6 5 9
-8 3 3 2
+  Enter number of sources: 2
+  Enter number of destinations: 2
+  Enter supply values:
+  Source 1: 20
+  Source 2: 30
+  Enter demand values:
+  Destination 1: 25
+  Destination 2: 25
+  Enter cost matrix:
+  Cost from S1 to D1: 8
+  Cost from S1 to D2: 6
+  Cost from S2 to D1: 10
+  Cost from S2 to D2: 7
 ```
 
 ---
 
-## Dependencies
-
+## 📊 Dependencies
 - Standard C++ Library (no external dependencies)
 
 ---
 
-## Notes
-
+## 📅 Notes
 - All inputs should be numerical (integers or floats)
 - Basic input validation included
 - For large inputs, output may exceed standard terminal width
 
----
-
-## Author
-
-Shivam Kumar Goyal
 
