@@ -3,20 +3,17 @@
 #include "dual_simplex.hpp"
 #include "assignment.hpp"
 #include "transportation.hpp"
-#include "integer.hpp"
 
 using namespace std;
 
 void displayMenu() {
-    cout << "\nOperations Research Methods:\n";
+    cout << "\nOptimisation Methods:\n";
     cout << "1. Simplex Method\n";
     cout << "2. Dual Simplex Method\n";
     cout << "3. Assignment Problem (Hungarian Algorithm)\n";
     cout << "4. Transportation Problem (Vogel's Approximation)\n";
-    cout << "5. Integer Linear Programming (Branch and Bound)\n";
-    cout << "6. Mixed Integer Programming (Branch and Bound)\n";
-    cout << "7. Exit\n";
-    cout << "Enter your choice (1-7): ";
+    cout << "5. Exit\n";
+    cout << "Enter your choice (1-5): ";
 }
 
 int main() {
@@ -44,20 +41,12 @@ int main() {
                 Transportation::runTransportation();
                 break;
             case 5:
-                cout << "\n--- Integer Linear Programming ---\n";
-                IntegerProgramming::runIntegerProgramming(false);
-                break;
-            case 6:
-                cout << "\n--- Mixed Integer Programming ---\n";
-                IntegerProgramming::runIntegerProgramming(true);
-                break;
-            case 7:
                 cout << "Exiting program...\n";
                 break;
             default:
                 cout << "Invalid choice. Please try again.\n";
         }
-    } while (choice != 7);
+    } while (choice != 5);
 
     return 0;
 }
